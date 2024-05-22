@@ -11,10 +11,10 @@ with st.sidebar:
 
 st.write('Nosso aplicativo tem como foco mostrar os dados da camara')
 
-tab_monitoramento, tab_ementas, tab_projetoslei = st.tabs(['Deputados', 'Ementas', 'Projetos de Lei'])
+tab_monitoramento, tab_ementas, tab_projetoslei = st.tabs(['Monitoramento', 'Ementas', 'Projetos de Lei'])
 
 with tab_monitoramento:
-  st.write('Essa aba será usada para colocar o nome dos deputados')
+  st.write('Essa aba será usada para colocar o monitoramento')
   col1, col2, col3 = st.columns(3)
 
 with col1:

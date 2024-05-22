@@ -15,7 +15,7 @@ tab_monitoramento, tab_ementas, tab_projetoslei = st.tabs(['Deputados', 'Ementas
 
 with tab_monitoramento:
   st.write('Essa aba será usada para colocar o nome dos deputados')
-  col1, col2, col3 = st.columns('ementas', 'projetos', 'outra coisa')
+  col1, col2, col3 = st.columns(3)
 
 with col1:
    st.header("A cat")

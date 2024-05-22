@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title('Câmara dos Deputados')
+st.title('Eco Política')
 #Fiscaliza verde, Legislativo Sustentável, Eco Política, Parlamento Ecológico, Agenda Verde
 
 
@@ -13,4 +13,6 @@ st.write('Nosso aplicativo tem como foco mostrar os dados da camara')
 
 tab_deputado, tab_ementas, tab_projetoslei = st.tabs(['Deputados', 'Ementas', 'Projetos de Lei'])
 
+with tab_deputado:
+  st.write('Essa aba será usada para colocar o nome dos deputados')
 

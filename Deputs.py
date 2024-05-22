@@ -6,7 +6,7 @@ st.title('Eco Política')
 
 with st.sidebar:
   st.header('Melhor site de dados da camara')
-  st.write('')
+  st.write('escrevo um texto')
   st.caption('Criado por Manuela, Maju e Clarissa')
 
 st.write('Nosso aplicativo tem como foco mostrar os dados da camara')

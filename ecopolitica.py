@@ -38,15 +38,15 @@ with open('modelo.pkl', 'rb') as arquivo:
   modelo = pickle.load(arquivo)
 
 with st.spinner('Buscando base atualizada'):
-  lista = []
-  for i in range(2010, 2024):
-      print(i)
-      df = baixaProposicoes(i)
-      keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
-      df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
-                   ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
-                    (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
-      lista.append(df_filtrado)
+    lista = []
+    for i in range(2010, 2024):
+        print(i)
+        df = baixaProposicoes(i)
+        keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
+        df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
+                        ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
+                        (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
+        lista.append(df_filtrado)
 
 df_all = pd.concat(lista)
 df_all = df_all[['ano', 'ementa', 'keywords']]
@@ -82,9 +82,9 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader('Número de Projetos')
-   obj = alt.Chart(df_all).mark_bar().encode(
-    x='ano',
-    y='count()',
-    color='classificacao'
-).properties(height=300)
+    obj = alt.Chart(df_all).mark_bar().encode(
+        x='ano',
+        y='count()',
+        color='classificacao'
+    ).properties(height=300)
     st.altair_chart(obj, use_container_width=True)

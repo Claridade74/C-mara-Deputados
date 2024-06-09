@@ -73,5 +73,5 @@ with col2:
         x=alt.X('ano', title='Ano') ,
         y=alt.Y('count()', title='Número de Projetos'),
         color=alt.Color('Classificação').legend(title='Classificação', orient='bottom')
-    ).properties(height=300)    
+    ).properties(height=360)    
     st.altair_chart(grafico_projetos, use_container_width=True)

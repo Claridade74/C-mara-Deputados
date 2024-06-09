@@ -38,20 +38,10 @@ with open('modelo.pkl', 'rb') as arquivo:
   modelo = pickle.load(arquivo)
 
 with st.spinner('Buscando base atualizada'):
-    lista = []
-    for i in range(2010, 2024):
-        print(i)
-        df = baixaProposicoes(i)
-        keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
-        df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
-                        ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
-                        (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
-        lista.append(df_filtrado)
-
+   
 df_all = pd.concat(lista)
 df_all = df_all[['ano', 'ementa', 'keywords']]
 df_all.dropna(subset=['ementa'], inplace=True)
-df_all.to_parquet('df_clarissa.parquet', index=False)
 
 def clean_text(text):
     text = text.lower()
@@ -69,8 +59,6 @@ df_all['ementa_clean'] = df_all['ementa_clean'].apply(remove_stopwords)
 categoria = modelo.predict(df_all['ementa_clean'])
 
 df_all['classificacao'] = categoria
-
-df_all.to_parquet('df_clarissa_classificado.parquet', index=False)
 
 obj = alt.Chart(df_all).mark_bar().encode(
     x='ano',

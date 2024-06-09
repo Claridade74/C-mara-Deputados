@@ -60,8 +60,8 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.subheader('Número de Projetos')
     obj = alt.Chart(df_all).mark_bar().encode(
-        x='ano',
+        x='Ano',
         y='count()',
-        color='classificacao'
-    ).properties(height=300)
+        color='classificao'
+    ).properties(height=500)
     st.altair_chart(obj, use_container_width=True)

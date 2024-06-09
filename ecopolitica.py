@@ -88,30 +88,3 @@ with col1:
     color='classificacao'
 ).properties(height=300)
     st.altair_chart(obj, use_container_width=True)
-    
-    st.subheader('Frentes Parlamentares')
-    dados_frentes = pd.DataFrame({
-        'Frente Parlamentar': ['Frente A', 'Frente B', 'Frente C'],
-        'Número de Projetos': [10, 20, 30],
-        'Número de Deputados': [5, 10, 15]
-    })
-    dados_frentes['Número de Projetos'] = dados_frentes['Número de Projetos'] + numeros_aleatorios[3:]
-    graf_frentes = alt.Chart(dados_frentes).mark_bar().encode(y='Frente Parlamentar:N',
-                                                              x='Número de Projetos:Q').properties(height=250)
-    st.altair_chart(graf_frentes, use_container_width=True)
-    st.dataframe(dados_frentes)
-
-with col2:
-    st.subheader('Projetos A Favor e Contra')
-    grafico_projetos_a_favor = alt.Chart(dados_fakes).mark_line(color='cornflowerblue').encode(x='Ano:N', y='Projetos A Favor:Q').properties(height=300)
-    grafico_projetos_contra = alt.Chart(dados_fakes).mark_line(color='red').encode(x='Ano:N', y='Projetos Contra:Q').properties(height=300)
-    st.altair_chart(grafico_projetos_a_favor, use_container_width=True)
-    st.altair_chart(grafico_projetos_contra, use_container_width=True)
-
-with col3:
-    st.subheader('Deputados')
-    st.dataframe(dados_deputados)
-    st.subheader('Projetos por partido')
-    df_group_party = dados_deputados.groupby('Partido')['Projetos'].sum().reset_index()
-    grafico_por_partido = alt.Chart(df_group_party).mark_bar(color='orchid').encode(x='Partido:N', y='Projetos:Q').properties(height=300)
-    st.altair_chart(grafico_por_partido, use_container_width=True)

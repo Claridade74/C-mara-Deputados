@@ -54,19 +54,24 @@ def remove_stopwords(text):
     return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
 
 df_all = pd.read_parquet('df_clarissa_classificado.parquet')
+df_all.rename(columns={'classificacao': 'Classificação'}, inplace=True)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader('Número de Projetos')
     obj = alt.Chart(df_all).mark_bar().encode(
-        x='ano',
-        y='count()'
+        x=alt.X('ano', title='Ano'),
+        y=alt.Y('count()', title='Número de Projetos')
     ).properties(height=300)
     st.altair_chart(obj, use_container_width=True)
     st.metric('Nº de projetos em 2024:', len(df_filtrado))
   
 with col2:
     st.subheader('Projetos A Favor e Contra')
-    grafico_projetos = alt.Chart(df_all).mark_line(color='cornflowerblue').encode(x='ano:N', y='classificacao:N').properties(height=300)
+    grafico_projetos = alt.Chart(df_all).mark_line().encode(
+        x=alt.X('ano', title='Ano') ,
+        y=alt.Y('count()', title='Número de Projetos'),
+        color=alt.Color('Classificação').legend(title='Classificação', orient='bottom')
+    ).properties(height=300)    
     st.altair_chart(grafico_projetos, use_container_width=True)

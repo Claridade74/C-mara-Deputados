@@ -114,5 +114,4 @@ with st.spinner('Baixando dados das frentes...'):
             subcol2.subheader(row['titulo'])
             subcol2.write(f'Coordenador: {coordenador["nome"]} - {coordenador["siglaPartido"]}-{coordenador["siglaUf"]}')
             subcol2.caption(f'Contato: {coordenador["email"]}')
-        subcol2.write(f'Coordenador: {coordenador["nome"]} - {coordenador["siglaPartido"]}-{coordenador["siglaUf"]}')
-        subcol2.caption(f'Contato: {coordenador["email"]}')
+

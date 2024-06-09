@@ -56,6 +56,10 @@ def remove_stopwords(text):
 df_all = pd.read_parquet('df_clarissa_classificado.parquet')
 df_all.rename(columns={'classificacao': 'Classificação'}, inplace=True)
 
+df_filtrado['ementa_clean'] = df_filtrado['ementa'].apply(clean_text)
+df_filtrado['ementa_clean'] = df_filtrado['ementa_clean'].apply(remove_stopwords)
+df_filtrado['Classificação'] = modelo.predict(df_filtrado['ementa_clean'])
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -79,7 +83,7 @@ with col2:
 
 st.subheader('Últimos projetos')
 st.write('Abaixo, você encontra os últimos projetos iniciados que são relacionados ao meio ambiente.')
-st.dataframe(df_filtrado[['siglaTipo', 'numero', 'ano', 'ementa']].tail(10), use_container_width=True)
+st.dataframe(df_filtrado[['siglaTipo', 'numero', 'ementa', 'Classificação']].tail(10), use_container_width=True)
 
 
 st.subheader('Frentes relacionadas ao Meio Ambiente')

@@ -56,7 +56,7 @@ def remove_stopwords(text):
 df_all = pd.read_parquet('df_clarissa_classificado.parquet')
 df_all.rename(columns={'classificacao': 'Classificação'}, inplace=True)
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     st.subheader('Número de Projetos')
@@ -75,3 +75,28 @@ with col2:
         color=alt.Color('Classificação').legend(title='Classificação', orient='bottom')
     ).properties(height=360)    
     st.altair_chart(grafico_projetos, use_container_width=True)
+
+st.subheader('Frentes relacionadas ao Meio Ambiente')
+st.write('Abaixo, você encontra as frentes parlamentares relacionadas ao meio ambiente, bem como seus coordenadores e contato.')
+url_base = 'https://dadosabertos.camara.leg.br/api/v2/frentes?idLegislatura=57'
+content = session.get(url_base).json()
+frentes = []
+for item in content['dados']:
+    frentes.append(item)
+while content['links'][1]['rel'] == 'next':
+    print(content['links'][1]['href'])
+    url = content['links'][1]['href']
+    content = session.get(url).json()
+    for item in content['dados']:
+        frentes.append(item)
+df_frentes = pd.DataFrame(frentes)
+df_frentes = df_frentes[df_frentes['titulo'].str.contains('agro|ambiente|lixo|rural|amaz.nia|verde|ecolog|campo|nutricional|bambu', na=False, regex=True, case=False)]
+for i, row in df_frentes.iterrows():
+    frente_info = session.get(row['uri']).json()
+    coordenador = frente_info['dados']['coordenador']
+    with st.container(border=True):
+        subcol1, subcol2 = st.columns([1, 7])
+        subcol1.image(coordenador['urlFoto'], width=100)
+        subcol2.subheader(row['titulo'])
+        subcol2.write(f'Coordenador: {coordenador["nome"]} - {coordenador["siglaPartido"]}-{coordenador["siglaUf"]}')
+        subcol2.caption(f'Contato: {coordenador["email"]}')

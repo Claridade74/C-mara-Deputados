@@ -2,7 +2,13 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 import random
-import 
+import string
+import re
+import pickle
+import nltk
+from nltk import stopwords
+
+nltk.download('stopwords')
 
 st.set_page_config(layout="wide",
                    page_title='EcoPolítica',
@@ -24,13 +30,15 @@ def baixaProposicoes(ano=2024):
         f.write(arquivo.content)
     return pd.read_excel('proposicoes.xlsx')
 
-df = baixaProposicoes(2024)
+with st.spinner('Buscando base atualizada'):
+  df = baixaProposicoes(2024)
+  keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
+  df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
+   ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
+   (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
 
-keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
-df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
- ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
- (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
-df_filtrado
+with open('modelo.pkl', 'rb') as arquivo:
+  modelo = pickle.load(arquivo)
 
 def clean_text(text):
     text = text.lower()

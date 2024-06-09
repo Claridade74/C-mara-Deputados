@@ -2,6 +2,7 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 import random
+import 
 
 st.set_page_config(layout="wide",
                    page_title='EcoPolítica',
@@ -17,25 +18,29 @@ with st.sidebar:
     st.caption('FGV ECMI')
 
 
-dados_fakes = pd.DataFrame({
-    'Ano': [2019, 2020, 2021, 2022, 2023, 2024],
-    'Número de Projetos': [10, 20, 30, 40, 50, 60],
-    'Projetos Contra': [9, 12, 18, 25, 15, 10]
-})
-dados_fakes['Número de Projetos'] = dados_fakes['Número de Projetos'] + numeros_aleatorios
-dados_fakes['Projetos Contra'] = dados_fakes['Projetos Contra'] + numeros_aleatorios
-dados_fakes['Projetos A Favor'] = dados_fakes['Número de Projetos'] - dados_fakes['Projetos Contra'] - [random.randint(1, 5) for _ in range(6)]
+def baixaProposicoes(ano=2024):
+    arquivo = requests.get(f'http://dadosabertos.camara.leg.br/arquivos/proposicoes/xlsx/proposicoes-{ano}.xlsx')
+    with open(f'proposicoes.xlsx', 'wb') as f:
+        f.write(arquivo.content)
+    return pd.read_excel('proposicoes.xlsx')
 
+df = baixaProposicoes(2024)
 
-dados_deputados = pd.DataFrame({
-    'Deputado': ['João', 'Maria', 'José', 'Ana', 'Pedro'],
-    'Partido': ['A', 'B', 'A', 'C', 'A'],
-    'Projetos A Favor': [10, 20, 30, 40, 50],
-    'Projetos Contra': [5, 10, 15, 20, 25]
-})
-dados_deputados['Projetos A Favor'] = dados_deputados['Projetos A Favor'] + numeros_aleatorios[:5]
-dados_deputados['Projetos'] = dados_deputados['Projetos A Favor'] + dados_deputados['Projetos Contra']
+keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
+df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
+ ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
+ (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
+df_filtrado
 
+def clean_text(text):
+    text = text.lower()
+    text = text.replace('\n', ' ')
+    text = re.sub(r'\d+', '', text)
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    return text
+
+def remove_stopwords(text):
+    return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
 
 col1, col2, col3 = st.columns(3)
 

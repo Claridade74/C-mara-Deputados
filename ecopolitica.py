@@ -23,7 +23,7 @@ st.caption('Análise de dados abertos da Câmara dos Deputados sobre o meio ambi
 
 with st.sidebar:
     st.subheader('EcoPolítica - Meio ambiente na Câmara dos Deputados')
-    st.write('O presente projeto tem om a finalidade de oferecer transparência e acessibilidade às informações legislativas, o site abrange diversas questões ambientais, incluindo sustentabilidade, atividades agropecuárias, extrativismo, pesca, preservação de tribos indígenas e conservação da natureza. O principal objetivo do EcoPolítica é fornecer uma visão clara e detalhada sobre os projetos que impactam o meio ambiente.')
+    st.write('O presente projeto tem como finalidade oferecer transparência e acessibilidade às informações legislativas. O site abrange diversas questões ambientais, incluindo sustentabilidade, atividades agropecuárias, extrativismo, pesca, preservação de tribos indígenas e conservação da natureza. O principal objetivo do EcoPolítica é fornecer uma visão clara e detalhada sobre os projetos que impactam o meio ambiente.')
     st.caption('Projeto desenvolvido por Maria Julia de Oliveira, Manuela Muniz e Clarissa Treptow, sob supervisão do Prof. Matheus C. Pestana')
     st.caption('FGV ECMI')
 

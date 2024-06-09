@@ -39,7 +39,7 @@ with open('modelo.pkl', 'rb') as arquivo:
 
 with st.spinner('Buscando base atualizada'):
    lista = []
-  for i in range(2010, 2024):
+  for i in range(2010, 2023):
       print(i)
       df = baixaProposicoes(i)
       keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'

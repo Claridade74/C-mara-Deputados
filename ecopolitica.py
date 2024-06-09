@@ -9,6 +9,8 @@ import nltk
 import requests
 nltk.download('stopwords')
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 from nltk.corpus import stopwords
 session = requests.Session()
 
@@ -31,16 +33,25 @@ def baixaProposicoes(ano=2024):
     with open(f'proposicoes.xlsx', 'wb') as f:
         f.write(arquivo.content)
     return pd.read_excel('proposicoes.xlsx')
-
-with st.spinner('Buscando base atualizada'):
-  df = baixaProposicoes(2024)
-  keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
-  df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
-   ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
-   (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
-
+  
 with open('modelo.pkl', 'rb') as arquivo:
   modelo = pickle.load(arquivo)
+
+with st.spinner('Buscando base atualizada'):
+   lista = []
+  for i in range(2010, 2024):
+      print(i)
+      df = baixaProposicoes(i)
+      keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
+      df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &
+                   ((df['ementa'].str.contains(keywords_busca, case=False, na=False, regex=True)) |
+                    (df['keywords'].str.contains(keywords_busca, case=False, na=False, regex=True)))]
+      lista.append(df_filtrado)
+
+df_all = pd.concat(lista)
+df_all = df_all[['ano', 'ementa', 'keywords']]
+df_all.dropna(subset=['ementa'], inplace=True)
+df_all.to_parquet('df_clarissa.parquet', index=False)
 
 def clean_text(text):
     text = text.lower()
@@ -52,12 +63,32 @@ def clean_text(text):
 def remove_stopwords(text):
     return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
 
+df_all['ementa_clean'] = df_all['ementa'].apply(clean_text)
+df_all['ementa_clean'] = df_all['ementa_clean'].apply(remove_stopwords)
+
+categoria = modelo.predict(df_all['ementa_clean'])
+
+df_all['classificacao'] = categoria
+
+df_all.to_parquet('df_clarissa_classificado.parquet', index=False)
+
+obj = alt.Chart(df_all).mark_bar().encode(
+    x='ano',
+    y='count()',
+    color='classificacao'
+)
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader('Número de Projetos')
-    grafico_projetos = alt.Chart(dados_fakes).mark_bar().encode(x='Ano:N', y='Número de Projetos:Q').properties(height=300)
-    st.altair_chart(grafico_projetos, use_container_width=True)
+   obj = alt.Chart(df_all).mark_bar().encode(
+    x='ano',
+    y='count()',
+    color='classificacao'
+).properties(height=300)
+    st.altair_chart(obj, use_container_width=True)
+    
     st.subheader('Frentes Parlamentares')
     dados_frentes = pd.DataFrame({
         'Frente Parlamentar': ['Frente A', 'Frente B', 'Frente C'],

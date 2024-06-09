@@ -54,11 +54,14 @@ def remove_stopwords(text):
     return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
 
 df_all = pd.read_parquet('df_clarissa_classificado.parquet')
-df_all.rename(columns={'classificacao': 'Classificação'}, inplace=True)
 
 df_filtrado['ementa_clean'] = df_filtrado['ementa'].apply(clean_text)
 df_filtrado['ementa_clean'] = df_filtrado['ementa_clean'].apply(remove_stopwords)
-df_filtrado['Classificação'] = modelo.predict(df_filtrado['ementa_clean'])
+df_filtrado['classificacao'] = modelo.predict(df_filtrado['ementa_clean'])
+
+df_all = pd.concat([df_all, df_filtrado])
+df_all.rename(columns={'classificacao': 'Classificação'}, inplace=True)
+df_filtrado.rename(columns={'classificacao': 'Classificação'}, inplace=True)
 
 col1, col2 = st.columns(2)
 

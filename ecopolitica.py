@@ -52,7 +52,9 @@ def clean_text(text):
   
 def remove_stopwords(text):
     return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
-  
+
+df_all = pd.read_parquet('df_clarissa_classificado.parquet')
+
 col1, col2, col3 = st.columns(3)
 
 with col1:

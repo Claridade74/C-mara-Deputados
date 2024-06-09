@@ -65,6 +65,7 @@ with col1:
         color='classificacao'
     ).properties(height=300)
     st.altair_chart(obj, use_container_width=True)
+    st.metric('Nº de projetos em 2024:', len(df))
   
 with col2:
     st.subheader('Projetos A Favor e Contra')

@@ -7,7 +7,7 @@ st.set_page_config(layout="wide",
                    page_title='EcoPolítica',
                    page_icon='🌳')
 
-st.header('EcoPolítica')
+st.header('EcoPolítica 🌳')
 st.caption('Análise de dados abertos da Câmara dos Deputados sobre o meio ambiente')
 
 with st.sidebar:

@@ -61,15 +61,12 @@ with col1:
     st.subheader('Número de Projetos')
     obj = alt.Chart(df_all).mark_bar().encode(
         x='ano',
-        y='count()',
-        color='classificacao'
+        y='count()'
     ).properties(height=300)
     st.altair_chart(obj, use_container_width=True)
     st.metric('Nº de projetos em 2024:', len(df_filtrado))
   
 with col2:
     st.subheader('Projetos A Favor e Contra')
-    grafico_projetos_a_favor = alt.Chart(df_all).mark_line(color='cornflowerblue').encode(x='ano:N', y='Projetos A Favor:N').properties(height=300)
-    grafico_projetos_contra = alt.Chart(df_all).mark_line(color='red').encode(x='ano:N', y='Projetos Contra:Q').properties(height=300)
-    st.altair_chart(grafico_projetos_a_favor, use_container_width=True)
-    st.altair_chart(grafico_projetos_contra, use_container_width=True)
+    grafico_projetos = alt.Chart(df_all).mark_line(color='cornflowerblue').encode(x='ano:N', y='classificacao:N').properties(height=300)
+    st.altair_chart(grafico_projetos, use_container_width=True)

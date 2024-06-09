@@ -39,7 +39,7 @@ with open('modelo.pkl', 'rb') as arquivo:
 
 with st.spinner('Buscando base atualizada'):
    
-df_all = pd.concat(lista)
+df_all = pd.read_parquet('df_clarissa_classificado.parquet', index=False)
 df_all = df_all[['ano', 'ementa', 'keywords']]
 df_all.dropna(subset=['ementa'], inplace=True)
 

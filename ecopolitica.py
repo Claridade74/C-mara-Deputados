@@ -53,15 +53,15 @@ def clean_text(text):
 def remove_stopwords(text):
     return ' '.join([word for word in text.split() if word not in stopwords.words('portuguese')])
 
-df_all = pd.read_parquet('df_clarissa_classificado.parquet')
+df_all = pd.read_parquet('df_clarissa_classificado.parquet', index=False)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader('Número de Projetos')
     obj = alt.Chart(df_all).mark_bar().encode(
-        x='Ano',
+        x='ano',
         y='count()',
-        color='classificao'
+        color='classificacao'
     ).properties(height=500)
     st.altair_chart(obj, use_container_width=True)

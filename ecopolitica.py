@@ -63,5 +63,5 @@ with col1:
         x='ano',
         y='count()',
         color='classificacao'
-    ).properties(height=500)
-    st.altair_chart(obj, use_container_width=True)
+    ).properties(height=300)
+    st.altair_chart(obj)

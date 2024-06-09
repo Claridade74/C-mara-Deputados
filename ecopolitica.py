@@ -39,8 +39,7 @@ with open('modelo.pkl', 'rb') as arquivo:
 
 with st.spinner('Buscando base atualizada'):
    lista = []
-  for i in range(2010, 2023):
-      print(i)
+  for i in range(2010, 2024):
       df = baixaProposicoes(i)
       keywords_busca = r'poluição|sucat[ae]|reciclagem|dejeto|pesca|praia|pecu[áa]ri|\bgado|descarte|queimada|lixo|meio ambiente|funai|ind.gena|garimpo|\bminera'
       df_filtrado = df[(df['codTipo'].isin([139, 291, 550, 554, 560, 561, 553, 552, 557, 632, 692, 693, 657, 658, 659, 660, 140, 390,141, 142, 136, 138])) &

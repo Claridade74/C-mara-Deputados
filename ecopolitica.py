@@ -6,10 +6,11 @@ import string
 import re
 import pickle
 import nltk
+import requests
 nltk.download('stopwords')
 
-from nltk import stopwords
-
+from nltk.corpus import stopwords
+session = requests.Session()
 
 st.set_page_config(layout="wide",
                    page_title='EcoPolítica',
